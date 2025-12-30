@@ -1,51 +1,63 @@
 <svg width="587" height="319" viewBox="0 0 587 319" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <style><![CDATA[
-      .font { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
-      .title { font-size: 32px; font-weight: 700; fill: #0B2027; }
-      .label { font-size: 18px; font-weight: 500; fill: #0B2027; }
-      .value { font-size: 18px; font-weight: 700; }
-    ]]></style>
-  </defs>
-  <rect x="1.5" y="1.5" width="584" height="316" rx="24" fill="#F6F1D1" stroke="#0B2027" stroke-width="3"/>
-  <text class="font title" x="28" y="58">kentakom1213</text>
+        <defs>
+                <style>
+                        <![CDATA[
+                        .font {
+                                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+                        }
 
-  <text class="font label" x="28" y="120">Total Stars Earned:</text>
-  <text class="font value" x="290" y="120" fill="#DEA584">1</text>
+                        .title {
+                                font-size: 32px;
+                                font-weight: 700;
+                                fill: #0B2027;
+                        }
 
-  <text class="font label" x="28" y="154">Total Commits (2025):</text>
-  <text class="font value" x="290" y="154" fill="#E34C26">659</text>
+                        .label {
+                                font-size: 18px;
+                                font-weight: 500;
+                                fill: #0B2027;
+                        }
 
-  <text class="font label" x="28" y="188">Total PRs:</text>
-  <text class="font value" x="290" y="188" fill="#3572A5">76</text>
+                        .value {
+                                font-size: 18px;
+                                font-weight: 500;
+                                fill: #0B2027;
+                        }
+                        ]]>
+                </style>
+        </defs>
+        <rect x="1.5" y="1.5" width="584" height="316" rx="24" fill="#F6F1D1" stroke="#0B2027" stroke-width="0" />
+        <text class="font title" x="28" y="58">kentakom1213</text>
 
-  <text class="font label" x="28" y="222">Total Issues:</text>
-  <text class="font value" x="290" y="222" fill="#F1E05A">13</text>
+        <text class="font label" x="28" y="120">Total Stars Earned:</text>
+        <text class="font value" x="250" y="120" fill="#DEA584">1</text>
 
-  <text class="font label" x="28" y="256">Contributed to (last year):</text>
-  <text class="font value" x="290" y="256" fill="#00ADD8">23</text>
+        <text class="font label" x="28" y="154">Total Commits (2025):</text>
+        <text class="font value" x="250" y="154" fill="#E34C26">659</text>
 
-  <circle cx="452" cy="175" r="78" fill="none" stroke="#0B2027" stroke-width="22" opacity="0.10"/>
+        <text class="font label" x="28" y="188">Total PRs:</text>
+        <text class="font value" x="250" y="188" fill="#3572A5">76</text>
 
-  <circle cx="452" cy="175" r="78" fill="none" stroke="#DEA584" stroke-width="22"
-          stroke-linecap="round" stroke-dasharray="210.732 279.682" stroke-dashoffset="122.603"
-          transform="rotate(-90 452 175)"/>
-  <circle cx="452" cy="175" r="78" fill="none" stroke="#E34C26" stroke-width="22"
-          stroke-linecap="round" stroke-dasharray="111.741 378.673" stroke-dashoffset="-88.129"
-          transform="rotate(-90 452 175)"/>
-  <circle cx="452" cy="175" r="78" fill="none" stroke="#3572A5" stroke-width="22"
-          stroke-linecap="round" stroke-dasharray="64.043 426.371" stroke-dashoffset="-199.870"
-          transform="rotate(-90 452 175)"/>
-  <circle cx="452" cy="175" r="78" fill="none" stroke="#F1E05A" stroke-width="22"
-          stroke-linecap="round" stroke-dasharray="43.597 446.817" stroke-dashoffset="-263.913"
-          transform="rotate(-90 452 175)"/>
-  <circle cx="452" cy="175" r="78" fill="none" stroke="#00ADD8" stroke-width="22"
-          stroke-linecap="round" stroke-dasharray="32.698 457.716" stroke-dashoffset="-307.510"
-          transform="rotate(-90 452 175)"/>
-  <circle cx="452" cy="175" r="78" fill="none" stroke="#0B2027" stroke-width="22"
-          stroke-linecap="round" stroke-dasharray="27.248 463.166" stroke-dashoffset="-340.208"
-          transform="rotate(-90 452 175)"/>
+        <text class="font label" x="28" y="222">Total Issues:</text>
+        <text class="font value" x="250" y="222" fill="#F1E05A">13</text>
 
-  <circle cx="452" cy="175" r="61" fill="#F6F1D1"/>
-  <text class="font label" x="452" y="173" text-anchor="middle" dominant-baseline="central">Top languages</text>
+        <text class="font label" x="28" y="256">Contributed to (last year):</text>
+        <text class="font value" x="250" y="256" fill="#00ADD8">23</text>
+
+        <circle cx="452" cy="175" r="78" fill="none" stroke="#0B2027" stroke-width="22" opacity="0.10" />
+
+        <circle cx="452" cy="175" r="78" fill="none" stroke="#DEA584" stroke-width="22" stroke-linecap="butt"
+                stroke-dasharray="210.732 279.682" stroke-dashoffset="122.603" transform="rotate(-90 452 175)" />
+        <circle cx="452" cy="175" r="78" fill="none" stroke="#E34C26" stroke-width="22" stroke-linecap="butt"
+                stroke-dasharray="111.741 378.673" stroke-dashoffset="-88.129" transform="rotate(-90 452 175)" />
+        <circle cx="452" cy="175" r="78" fill="none" stroke="#3572A5" stroke-width="22" stroke-linecap="butt"
+                stroke-dasharray="64.043 426.371" stroke-dashoffset="-199.870" transform="rotate(-90 452 175)" />
+        <circle cx="452" cy="175" r="78" fill="none" stroke="#F1E05A" stroke-width="22" stroke-linecap="butt"
+                stroke-dasharray="43.597 446.817" stroke-dashoffset="-263.913" transform="rotate(-90 452 175)" />
+        <circle cx="452" cy="175" r="78" fill="none" stroke="#00ADD8" stroke-width="22" stroke-linecap="butt"
+                stroke-dasharray="32.698 457.716" stroke-dashoffset="-307.510" transform="rotate(-90 452 175)" />
+        <circle cx="452" cy="175" r="78" fill="none" stroke="#0B2027" stroke-width="22" stroke-linecap="butt"
+                stroke-dasharray="27.248 463.166" stroke-dashoffset="-340.208" transform="rotate(-90 452 175)" />
+
+        <circle cx="452" cy="175" r="61" fill="#F6F1D1" />
 </svg>
