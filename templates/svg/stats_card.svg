@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="{{ width }}"
+     height="{{ height }}"
+     viewBox="0 0 {{ width }} {{ height }}"
+     role="img"
+     aria-label="{{ aria_label|e }}">
+
+  <rect x="0" y="0"
+        width="{{ width }}"
+        height="{{ height }}"
+        rx="{{ radius }}"
+        fill="{{ theme.background_color }}" />
+
+  <text x="{{ pad_x }}" y="{{ title_y }}"
+        fill="{{ theme.text_color }}"
+        font-family="{{ font_family|e }}"
+        font-size="{{ title_size }}"
+        dominant-baseline="middle">
+    {{ title|e }}
+  </text>
+
+  <g transform="translate({{ left_x }}, {{ left_y }})">
+    {% for row in stats_rows %}
+      <g transform="translate(0, {{ row.dy }})">
+        <text x="0" y="0"
+              fill="{{ theme.text_color }}"
+              font-family="{{ font_family|e }}"
+              font-size="{{ stat_label_size }}"
+              dominant-baseline="middle"
+              opacity="{{ stat_label_opacity }}">
+          {{ row.label|e }}
+        </text>
+
+        <text x="{{ stat_value_x }}" y="0"
+              fill="{{ theme.text_color }}"
+              font-family="{{ font_family|e }}"
+              font-size="{{ stat_value_size }}"
+              dominant-baseline="middle">
+          {{ row.value|e }}
+        </text>
+      </g>
+    {% endfor %}
+  </g>
+
+  {% if show_pie %}
+  <g transform="translate({{ pie_group_x }}, {{ pie_group_y }})">
+    <text x="0" y="{{ pie_title_y }}"
+          fill="{{ theme.text_color }}"
+          font-family="{{ font_family|e }}"
+          font-size="{{ section_title_size }}"
+          dominant-baseline="middle">
+      {{ top_languages_title|e }}
+    </text>
+
+    <g transform="translate({{ pie_cx }}, {{ pie_cy }})">
+      {% if pie_base_stroke != "" %}
+      <circle cx="0" cy="0" r="{{ pie_r }}"
+              fill="none"
+              stroke="{{ pie_base_stroke }}"
+              stroke-width="{{ pie_stroke }}" />
+      {% endif %}
+
+      <g transform="rotate(-90 0 0)">
+        {% for seg in lang_segments %}
+        <circle cx="0" cy="0" r="{{ pie_r }}"
+                fill="none"
+                stroke="{{ seg.color }}"
+                stroke-width="{{ pie_stroke }}"
+                stroke-dasharray="{{ seg.dasharray }}"
+                stroke-dashoffset="{{ seg.dashoffset }}" />
+        {% endfor %}
+      </g>
+    </g>
+  </g>
+  {% endif %}
+</svg>

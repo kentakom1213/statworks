@@ -35,7 +35,7 @@ SVG 仕様上の開始点（3 時方向）を補正するため，
 円グラフ全体に以下の変換を適用する．
 
 ```svg
-transform="rotate(-90 cx cy)"
+transform="rotate(0 cx cy)"
 ```
 
 ---

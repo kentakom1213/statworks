@@ -1,254 +1,202 @@
-# statworks 設計ドキュメント
+# statworks 設計ドキュメント（Summary 専用・簡約版）
 
-statworks は，GitHub をはじめ複数サービスの統計情報を一元的に扱い，
-SVG のカードとして返す軽量 API サーバである．
-Rust 製の Cloudflare Workers 上で動作し，高速かつ柔軟に拡張可能な構成を採る．
+statworks は，GitHub をはじめとするサービスの統計情報を集計し，
+SVG の Summary カードとして返却する軽量 API サーバである．
+Rust 製の Cloudflare Workers 上で動作し，高速かつシンプルな構成を採る．
+
+本ドキュメントは，**Summary カードのみを提供する最小構成**としての
+statworks の設計仕様を記述する．
 
 ---
 
 ## 1．概要
 
-statworks は以下を目標とした Web API 群である．
+statworks は以下を目的とした Web API である．
 
-* GitHub Readme Stats に相当する機能を Rust で再実装
-* Cloudflare Workers に最適化した高速レスポンス
-* さまざまなサービスの統計情報を統合する基盤
-* SVG デザインを API で返す仕組みを提供
-* テーマ，フォント，表示形式をクエリで指定可能
+- GitHub Readme Stats 相当の Summary カードを Rust で再実装
+- Cloudflare Workers 上での低レイテンシ SVG 生成
+- SVG を API レスポンスとして直接返却
+- テーマ指定を最小限に抑えたシンプルな設計
+- Askama による SVG テンプレート生成
 
-現在は GitHub の統計を中心に対応するが，将来的には複数サービス統合を目指す．
+本バージョンでは，**Summary カードのみを実装対象**とし，
+個別の言語カードや数値カードは提供しない．
 
 ---
 
-## 2．現状提供する機能（GitHub Stats）
+## 2．提供機能（Summary Card）
 
-* 言語割合（ミニ円グラフ）
-* 総スター数
-* コミット数（年間または合計）
-* Summary カード（総合カード）
-* テーマ切り替え（light，dark，tokyo-night，solarized-light，nord，monokai）
-* フォント指定（Times New Roman など）
-* Cloudflare Workers のキャッシュを用いた高速化
+Summary カードには以下の情報を含める．
+
+- GitHub ユーザー名
+- 総スター数
+- コミット数（年間）
+- Pull Requests 数
+- Issues 数
+- 言語割合（mini pie chart，上起点）
 
 ---
 
 ## 3．API 設計
 
-### 3.1 共通仕様
-
-すべての API は SVG を返す．
-Content-Type は `image/svg+xml`．
-テーマや表示内容はクエリで指定して変更できる．
+### 3.1 エンドポイント
 
 ```
-GET /api/<endpoint>?user=USERNAME&theme=THEME&その他パラメータ
+GET /summary?user=USERNAME
 ```
+
+#### クエリパラメータ
+
+| 名前             | 必須 | 説明                |
+| ---------------- | ---- | ------------------- |
+| user             | yes  | GitHub ユーザー名   |
+| background-color | no   | 背景色（CSS color） |
+| text-color       | no   | 文字色（CSS color） |
+
+指定がない場合は，以下をデフォルトとする．
+
+```text
+background-color = #F6F1D1
+text-color       = #0B2027
+```
+
+#### レスポンス
+
+- Content-Type: `image/svg+xml`
+- Body: Summary カード SVG
 
 ---
 
-### 3.2 エンドポイント一覧
+## 4．テーマ設計（簡約版）
 
-#### 言語割合
+テーマは **2 色のみ**で構成する．
+アクセント色（言語色など）は statworks 側で固定定義する．
 
-```
-GET /api/lang?user=USERNAME&theme=THEME
-```
-
-返す内容：ミニ円グラフ（開始角 0,1 方向＝真上スタート）と凡例．
-
-#### スター数
-
-```
-GET /api/stars?user=USERNAME&theme=THEME
-```
-
-#### コミット数
-
-```
-GET /api/commits?user=USERNAME&mode=yearly&theme=THEME
-```
-
-mode は以下．
-
-* yearly（12 か月の contrib）
-* total（contributors API を合算）
-
-#### Summary カード
-
-```
-GET /api/summary?user=USERNAME&theme=THEME
-```
-
-言語，スター，コミットを 1 枚のカードにまとめる．
-
----
-
-## 4．テーマ設計
-
-テーマは Query パラメータによって切り替えできる．
-
-### 4.1 対応テーマ一覧
-
-* light（デフォルト）
-* dark
-* tokyo-night
-* solarized-light
-* nord
-* monokai
-
-未知のテーマ名が指定された場合は light にフォールバックする．
-
-### 4.2 Theme struct
+### 4.1 Theme struct
 
 ```rust
 pub struct Theme {
-    pub background: &'static str,
-    pub border: &'static str,
-    pub text: &'static str,
-    pub accent1: &'static str,  // Rust 等の主要色
-    pub accent2: &'static str,
-    pub accent3: &'static str,
+    pub background_color: String,
+    pub text_color: String,
 }
 ```
+
+- `background_color`：カード背景
+- `text_color`：テキスト・ベース色
+
+クエリで指定された値をそのまま使用し，
+未指定時はデフォルト値を用いる．
 
 ---
 
 ## 5．フォント設計
 
-SVG 内では外部フォントの import が GitHub でブロックされる可能性があるため，
-以下の system font を使用する方式を採る．
+SVG 内では system font を使用する．
 
-```
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-```
-
-また，Times New Roman など任意 serif を指定する場合は以下のように SVG 内に置く．
-
-```svg
-<style>
-  text { font-family: "Times New Roman", Times, serif; }
-</style>
+```css
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+  sans-serif;
 ```
 
-フォント指定用の構造体を作成して，設定から変更できるようにする．
+フォントは固定とし，クエリによる切り替えは行わない．
+（将来拡張の余地は残す）
 
 ---
 
-## 6．SVG デザイン
+## 6．SVG デザイン設計（Summary）
 
-### 6.1 全体方針
+### 6.1 共通方針
 
-* ミニマルデザイン
-* カード枠とフォントの統一
-* 軽量（rect，text，circle，path のみ）
-* Rust 側で文字列として組み立て可能
-* Cloudflare Workers でも高速に生成できる
+- `<rect>`, `<text>`, `<circle>` のみで構成
+- テキストはすべて `<text>`（アウトライン化しない）
+- 外枠ストロークは使用しない
+- Askama テンプレートは描画専用
+- 数値計算・割合計算は Rust 側で実施
+
+---
 
 ### 6.2 言語割合（mini pie）
 
-特徴：
+- 開始角は真上（12 時方向）
+- 円周長 (C = 2\pi r)
+- 割合 (p \in [0,1])
 
-* 開始角は真上（0,1）
-* 円グラフはパス 3 枚で構成
-* Legend は circle + text
-* フォントは Times New Roman または system sans-serif
+[
+\text{dasharray} = (C \cdot p,; C)
+]
 
-### 6.3 スター数，コミット数カード
+[
+\text{dashoffset} = -C \cdot \sum_{j<i} p_j
+]
 
-* 左上にラベル
-* 下段に数値を大きめに表示
-* 背景色と枠線は Theme に合わせる
-* レスポンスは即時生成（キャッシュ利用）
+SVG 側では以下を適用する．
 
-### 6.4 Summary カード（compact）
+```svg
+<g transform="rotate(0 cx cy)">
+```
 
-* タイトル
-* Stars，Commits，Languages を縦方向に配置
-* テーマで配色を調整
+- `stroke-linecap="butt"`
+- セグメント数は可変
 
 ---
 
 ## 7．Rust 実装設計
 
-### 7.1 構成
+### 7.1 ディレクトリ構成（Summary 専用）
 
 ```
 statworks/
  ├─ src/
- │   ├─ theme.rs        // テーマ配色
+ │   ├─ theme.rs        // background / text color
+ │   ├─ github.rs       // GitHub API client
  │   ├─ render/
- │   │    ├─ lang.rs    // 言語割合 SVG 生成
- │   │    ├─ stars.rs   // スター SVG 生成
- │   │    ├─ commits.rs // コミット SVG 生成
- │   │    └─ summary.rs // Summary カード生成
- │   ├─ github.rs       // GitHub API クライアント
- │   └─ lib.rs          // ルーティング
+ │   │    └─ summary.rs // Summary 用データ生成
+ │   ├─ template/
+ │   │    └─ summary.rs // Askama Template struct
+ │   └─ lib.rs          // /summary routing
+ ├─ templates/
+ │   └─ svg/
+ │        └─ summary.svg
  ├─ Cargo.toml
  └─ wrangler.toml
 ```
 
-### 7.2 テーマ切り替え
+---
 
-テーマ指定用の構造体を作成し，設定から変更できるようにする．
+### 7.2 Summary 生成フロー
 
-```rust
-pub fn theme_from_query(name: &str) -> Theme {
-    match name.to_lowercase().as_str() {
-        "dark" => Theme { ... },
-        "tokyo-night" => Theme { ... },
-        "solarized-light" => Theme { ... },
-        "nord" => Theme { ... },
-        "monokai" => Theme { ... },
-        _ => Theme::light(), // fallback
-    }
-}
-```
-
-### 7.3 Cloudflare Workers
-
-Rust モジュールは wasm32-unknown-unknown にビルドし Workers に deploy する．
-
-```bash
-rustup target add wasm32-unknown-unknown
-cargo build --release --target wasm32-unknown-unknown
-wrangler publish
-```
+1．`/summary?user=USERNAME` を受信
+2．GitHub API から必要な情報を取得
+3．Rust 側で数値集計・言語割合計算
+4．Askama テンプレートに値を流し込む
+5．SVG をレスポンスとして返却
 
 ---
 
-## 8．GitHub API（現在対応している部分）
+## 8．GitHub API 対応範囲
 
-* リポジトリ一覧取得
-* 言語 API
-* コントリビューション（GraphQL yearly）
-* スター数の集計
+- Repositories 一覧
+- Languages API
+- GraphQL Contributions（年間）
+- Pull Requests / Issues 集計
+- Star 合算
 
-レートリミット回避のため Workers Cache API と KV を併用する．
+Workers Cache API を用いてレスポンスをキャッシュする．
 
 ---
 
-## 9．将来的な拡張（マルチサービス対応）
+## 9．将来的拡張（設計余地）
 
-statworks は以下のサービス統合を視野に入れている．
+- テーマプリセット復活（dark 等）
+- フォント指定クエリ
+- 言語凡例の ON/OFF
+- 他サービス統合（GitLab 等）
 
-* GitHub
-* GitLab
-* Bitbucket
-* AtCoder（レーティング・提出）
-* Stack Overflow
-* Zenn / Qiita
-* Twitter / Bluesky（フォロワー統計）
-
-共通化の方向性：
-
-* 統計データを抽象化した Trait
-* 各サービスのクライアント実装
-* Summary カードへの統合表示
-* 共通キャッシュ戦略
+現段階では **Summary に集中**し，
+API と SVG 生成の安定性を優先する．
 
 ---
 
 ## 10．ライセンス
 
-MIT ライセンス．
-
+MIT License．
