@@ -47,17 +47,17 @@
         <circle cx="452" cy="175" r="78" fill="none" stroke="#0B2027" stroke-width="22" opacity="0.10" />
 
         <circle cx="452" cy="175" r="78" fill="none" stroke="#DEA584" stroke-width="22" stroke-linecap="butt"
-                stroke-dasharray="210.732 279.682" stroke-dashoffset="122.603" transform="rotate(-90 452 175)" />
+                stroke-dasharray="210.732 279.682" stroke-dashoffset="122.603" transform="rotate(0 452 175)" />
         <circle cx="452" cy="175" r="78" fill="none" stroke="#E34C26" stroke-width="22" stroke-linecap="butt"
-                stroke-dasharray="111.741 378.673" stroke-dashoffset="-88.129" transform="rotate(-90 452 175)" />
+                stroke-dasharray="111.741 378.673" stroke-dashoffset="-88.129" transform="rotate(0 452 175)" />
         <circle cx="452" cy="175" r="78" fill="none" stroke="#3572A5" stroke-width="22" stroke-linecap="butt"
-                stroke-dasharray="64.043 426.371" stroke-dashoffset="-199.870" transform="rotate(-90 452 175)" />
+                stroke-dasharray="64.043 426.371" stroke-dashoffset="-199.870" transform="rotate(0 452 175)" />
         <circle cx="452" cy="175" r="78" fill="none" stroke="#F1E05A" stroke-width="22" stroke-linecap="butt"
-                stroke-dasharray="43.597 446.817" stroke-dashoffset="-263.913" transform="rotate(-90 452 175)" />
+                stroke-dasharray="43.597 446.817" stroke-dashoffset="-263.913" transform="rotate(0 452 175)" />
         <circle cx="452" cy="175" r="78" fill="none" stroke="#00ADD8" stroke-width="22" stroke-linecap="butt"
-                stroke-dasharray="32.698 457.716" stroke-dashoffset="-307.510" transform="rotate(-90 452 175)" />
+                stroke-dasharray="32.698 457.716" stroke-dashoffset="-307.510" transform="rotate(0 452 175)" />
         <circle cx="452" cy="175" r="78" fill="none" stroke="#0B2027" stroke-width="22" stroke-linecap="butt"
-                stroke-dasharray="27.248 463.166" stroke-dashoffset="-340.208" transform="rotate(-90 452 175)" />
+                stroke-dasharray="27.248 463.166" stroke-dashoffset="-340.208" transform="rotate(0 452 175)" />
 
         <circle cx="452" cy="175" r="61" fill="#F6F1D1" />
 </svg>
